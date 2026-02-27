@@ -12,10 +12,6 @@
       "dest": "/"
     }
   ],
-  "env": {
-    "NEXTAUTH_URL": "@nextauth_url",
-    "NEXTAUTH_SECRET": "@nextauth_secret"
-  },
   "buildCommand": "npm run build",
   "outputDirectory": ".next"
 }
