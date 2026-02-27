@@ -12,7 +12,7 @@ function getDbPath() {
   return path.join(process.cwd(), "db", "data.json");
 }
 
-export function getDatabase() {
+export function getDatabase(): Database {
   if (!db) {
     const dbPath = getDbPath();
 
@@ -31,7 +31,7 @@ export function getDatabase() {
       initializeDatabase();
     }
   }
-  return db;
+  return db as Database;
 }
 
 function initializeDatabase() {

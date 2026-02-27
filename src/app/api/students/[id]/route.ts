@@ -5,20 +5,21 @@ import { getDatabase, saveDatabase } from "@/lib/db";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const db = getDatabase();
-    const user = db.users.find((u) => u.email === session.user.email);
+    const user = db.users.find((u) => u.email === session.user!.email);
 
     const student = db.students.find(
-      (s) => s.id === parseInt(params.id) && s.user_id === user?.id
+      (s) => s.id === parseInt(id) && s.user_id === user?.id
     );
 
     if (!student) {
@@ -37,20 +38,21 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const db = getDatabase();
-    const user = db.users.find((u) => u.email === session.user.email);
+    const user = db.users.find((u) => u.email === session.user!.email);
 
     const studentIdx = db.students.findIndex(
-      (s) => s.id === parseInt(params.id) && s.user_id === user?.id
+      (s) => s.id === parseInt(id) && s.user_id === user?.id
     );
 
     if (studentIdx === -1) {
@@ -93,20 +95,21 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const db = getDatabase();
-    const user = db.users.find((u) => u.email === session.user.email);
+    const user = db.users.find((u) => u.email === session.user!.email);
 
     const studentIdx = db.students.findIndex(
-      (s) => s.id === parseInt(params.id) && s.user_id === user?.id
+      (s) => s.id === parseInt(id) && s.user_id === user?.id
     );
 
     if (studentIdx === -1) {

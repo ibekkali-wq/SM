@@ -7,12 +7,12 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const db = getDatabase();
-    const user = db.users.find((u) => u.email === session.user.email);
+    const user = db.users.find((u) => u.email === session.user!.email);
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
@@ -34,12 +34,12 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session?.user) {
+    if (!session || !session.user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const db = getDatabase();
-    const user = db.users.find((u) => u.email === session.user.email);
+    const user = db.users.find((u) => u.email === session.user!.email);
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
